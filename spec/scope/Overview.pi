@@ -1,0 +1,38 @@
+export PURPOSE:
+    A dashboard for monitoring an orchestrated build across agents and
+    harnesses. This package supplies an initial specification to tether
+    into another application's specification.
+
+export INTENDED_USERS:
+    People watching an orchestrated build who need visibility into the
+    work currently running and the usage limits that may affect it.
+
+export CAPABILITIES:
+    - Show currently running tasks, broken down across agents and harnesses.
+    - Show running time for tasks.
+    - Show estimated task progress and time to completion where possible.
+    - Show usage limits and projections for when those limits may be hit.
+    - Provide comprehensive usage totals, trends, breakdowns, quotas, and available costs.
+    - Show local and remote software builds used by the consuming pipeline.
+
+export SCOPE:
+    - The dashboard monitors builds only.
+    - Pausing tasks, cancelling runs, and reassigning work are outside scope.
+    - This package supplies a specification and an implementation skill.
+    - Dashboard implementation happens in the consuming application when requested.
+
+export INITIAL_SUCCESS_CRITERIA:
+    - A viewer can identify running tasks and their agents and harnesses.
+    - A viewer can see task running time and available progress and ETA estimates.
+    - A viewer can see usage limits and available projections for reaching them.
+    - Estimates and unknown values follow the estimate policy.
+    - The specification can be tethered into the consuming application's spec.
+
+export LIMITS_QUESTION:
+    - Which usage limits and reset periods must be represented?
+
+export REFRESH_QUESTION:
+    - How frequently should the UI refresh independently of agent reporting?
+
+export INTEGRATION_QUESTION:
+    - How will the consuming application's specification reference this package?

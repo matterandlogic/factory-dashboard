@@ -1,0 +1,128 @@
+use @piton/belay
+
+from ../FactoryDashboard import FactoryDashboard
+
+export skill ImplementFactoryDashboard:
+    description:
+        Inspects an application's build orchestration, asks focused setup
+        questions, and implements a monitoring dashboard.
+    useWhen:
+        asked to implement or integrate the orchestrated build dashboard
+        in a consuming application
+    prompt:
+        Implement the dashboard in the current consuming application using
+        @{FactoryDashboard} and its existing specification as the requirements.
+        Start by inspecting the application and asking focused questions
+        about its build setup. After the necessary answers, implement and
+        verify the dashboard; do not stop at a specification or plan.
+
+    inspectTheApplication:
+        Before Piton work, run piton agent --print-fluency in the consuming
+        project and read the complete output. If it fails, report the
+        failure instead of guessing Piton conventions. Read piton.config.pi,
+        the entry file, relevant source specifications and compiled
+        references, and applicable project guidance. Locate the application
+        UI, build orchestration, harness integrations, and existing telemetry.
+        Follow references only as needed.
+
+        Discover whether the consuming pipeline uses local or remote
+        software builds, including mixed execution. Inspect its existing
+        build tools and services for usable job telemetry; do not assume
+        an agent's location is the location of its build jobs.
+
+        Inspect available harness interfaces, event streams, logs, and
+        temporary-file producers to establish what data actually exists.
+        Use installed interfaces or authoritative documentation to verify
+        capabilities; do not invent harness APIs or assume temporary files
+        share a schema. Treat the package's candidate sources as possibilities.
+
+    askFocusedQuestions:
+        Ask exactly one question per turn and wait for the answer. Start
+        with the most consequential missing information about the current
+        orchestration setup. Do not ask for facts already established by
+        the user, application, or specification. Use findings from inspection
+        to offer concrete options and explain relevant limitations.
+
+        Resolve only decisions needed for this implementation, such as
+        which builds and harnesses to monitor, where to place the dashboard,
+        which exposed usage limits matter, and whether missing telemetry
+        can be supplied by an agreed integration. Choose each question from
+        what remains unknown; do not turn these topics into a questionnaire.
+        There is no fixed question budget. Stop questioning when there is
+        enough information to implement, respecting any budget the user gives.
+
+        If the user does not know an answer, investigate what is feasible
+        and recommend an approach grounded in the application. Preserve
+        unresolved values as unknown. Do not require a separate approval
+        round before implementation when the user's request already
+        authorizes it. If essential access or information is missing,
+        identify the specific blocker and complete independent work.
+
+    alignTheSpecification:
+        Record confirmed integration decisions in the consuming project's
+        own .pi source, using its established structure. Preserve unrelated
+        requirements and distinguish confirmed decisions from unresolved
+        questions. Treat tethered package files as vendored dependencies;
+        do not edit them to customize the consuming application. Keep lasting
+        guidance changes in source and rebuild generated artifacts.
+
+    implementTheDashboard:
+        Use the application's existing stack and UI conventions. Implement
+        task visibility across agents and harnesses, running time, available
+        progress and completion estimates, usage limits, and projections
+        for reaching those limits, following @{FactoryDashboard}.
+
+        Connect to the verified sources. Preserve task, agent, harness,
+        and run identity when combining data, and account for parallel
+        execution when estimating completion. Avoid counting the same usage
+        more than once when multiple sources report it. Represent the scope
+        and reset period of a limit when the source supplies them.
+
+        Clearly distinguish observed values, estimates, unknown values,
+        and stale or disconnected sources. Do not present fabricated
+        percentages, unavailable limits, or sample data as live telemetry.
+        Ground projections in available observations and explain their
+        basis where useful. Leave them unknown when data is insufficient.
+
+        Implement the shared agent reporting, automatic update, source
+        reconciliation, and freshness requirements in @{FactoryDashboard}.
+        Define the concrete shared format and transport in the consuming
+        specification and integrate reporting into its agent guidance or
+        telemetry producers. Do not require complete harness metrics before
+        supporting a source. Verify agent precedence when reports conflict
+        and retain unknown values when no usable measurement exists.
+
+        Keep the dashboard observational. Do not add pause, cancellation,
+        or reassignment controls. If additional telemetry instrumentation
+        is needed, fit it to the agreed integration without changing build
+        scheduling or task execution behavior.
+
+        When software builds are used, implement the buildExecution
+        requirements in @{FactoryDashboard}. Reuse the application's
+        existing build sources, associate jobs with agent tasks, and
+        display local and remote execution with available status, timing,
+        estimates, and existing detail or log links. Record unsupported
+        telemetry as unknown rather than introducing a different build system.
+
+    reportingLifecycleAndUsage:
+        Implement the attempt identity, sequence ordering, reporter health,
+        metric freshness, and completed-result rules in @{FactoryDashboard}.
+        Use a harness hook or background reporter for heartbeats while an
+        agent is occupied. Implement usageReporting with available totals,
+        trends, breakdowns, shared quotas, reset times, remaining capacity,
+        exhaustion projections, and costs. Verify that replayed reports and
+        overlapping cumulative totals and increments do not duplicate usage.
+
+    verifyAndReport:
+        Run piton format, piton check, and piton build after specification
+        changes, fix reported source problems, and inspect generated diffs.
+        Run the application's relevant checks and exercise the dashboard
+        against available real telemetry or clearly identified fixtures.
+        Verify concurrent task grouping and timing, usage calculations,
+        estimate labeling, and missing or stale data behavior where relevant.
+        Use browser verification when available for the implemented UI.
+
+        Report what was implemented, the connected data sources, checks
+        actually run and their results, how to open the dashboard, and any
+        remaining unsupported metrics or blocked integrations. Do not claim
+        live integration was verified when only fixtures were available.

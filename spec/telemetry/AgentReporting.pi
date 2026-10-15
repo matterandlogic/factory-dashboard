@@ -1,0 +1,44 @@
+export SHARED_AGENT_REPORTING:
+    obligation:
+        Agents must automatically provide task status, timing, progress,
+        estimated completion, usage, limits, and limit projections through
+        one shared format across agents and harnesses. Agents must make
+        available information explicit; missing harness telemetry does
+        not remove the reporting obligation. Information an agent cannot
+        obtain or reasonably estimate must be explicitly unknown.
+    formatBoundary:
+        The consuming application defines one concrete serialization
+        and transport for this shared contract. All reporting agents
+        use it; harness-specific inputs are mapped into the same concepts.
+    reportContent:
+        - Run, task, agent, and harness identity for correlating reports.
+        - A distinct attempt identity for each task retry.
+        - An increasing report sequence number within each task attempt.
+        - Task status and the time the reported information was updated.
+        - Running time, or timing information from which it can be derived.
+        - Task progress and estimated time to completion.
+        - Usage, applicable limits, and projected time to reaching each limit.
+        - Whether each metric is observed, estimated, or unknown.
+        - Associated software build jobs and their execution locations when applicable.
+    metricSemantics:
+        Include units for numeric metrics and the scope of usage limits
+        when known. Include reset information when available. Label
+        estimates and preserve unknown values without inventing data.
+    automaticUpdates:
+        Report when task status changes and periodically while tasks
+        are running, without waiting for a user to request an update.
+        A harness hook or background reporter maintains heartbeats while
+        an agent is busy or blocked. Heartbeats indicate reporter health;
+        each task metric retains its own last-checked time. Sending a
+        heartbeat alone does not refresh task status or metrics.
+    configurableDefaults:
+        reportingIntervalSeconds: 10
+        staleAfterSeconds: 30
+        missedHeartbeatsBeforeStale: 3
+    defaultRationale:
+        These are initial operational defaults chosen under the user's
+        request to use reasonable timing. The consuming application
+        may configure them for its environment.
+
+export REPORTING_OPEN_QUESTIONS:
+    - What serialization and transport will implement the shared reporting contract?

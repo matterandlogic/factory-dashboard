@@ -1,0 +1,40 @@
+export BUILD_EXECUTION:
+    purpose:
+        When the consuming application or agent pipeline performs local
+        or remote software builds, use its existing build telemetry to
+        display those builds alongside the orchestrated agent work.
+        This applies across languages; a Rust build is one example.
+    integration:
+        Discover the build commands, runners, services, and reporting
+        sources actually used by the consuming application. Reuse available
+        status and timing information through the shared reporting contract.
+        Do not require a particular language, build tool, or hosting provider.
+    displayedInformation:
+        - Build identity and association with the orchestration run and agent task.
+        - Whether execution is local, remote, mixed, or unknown.
+        - Runner, host, or service identity when available.
+        - Reported build status and outcome when known.
+        - Running time and available progress and completion estimates.
+        - Links to existing remote build details or logs when available.
+    executionLocation:
+        Describe where build work executes, not where its agent runs.
+        An agent running locally can delegate a build to a remote runner.
+        For pipelines with both local and remote jobs, preserve each job's
+        location and association rather than assigning all jobs one location.
+    reliability:
+        Apply the existing unknown-value, estimate-labeling, freshness,
+        and agent-precedence policies to build telemetry. A temporarily
+        unreachable runner does not by itself imply a failed build.
+    boundary:
+        Observe the existing build pipeline. Do not introduce build
+        triggering, cancellation, runner selection, or changes to the
+        application's local or remote execution strategy.
+    acceptanceCriteria:
+        - A local build appears with its task association and known status and timing.
+        - A remote build is identified as remote even when its agent runs locally.
+        - Local and remote jobs in one pipeline retain their individual locations.
+        - Missing build metrics are unknown and available estimates are labeled.
+        - A disconnected build source is marked stale under the existing policy.
+    openQuestions:
+        - Which local tools and remote build services does the consuming pipeline use?
+        - What job identity, status, timing, progress, and log access do they expose?

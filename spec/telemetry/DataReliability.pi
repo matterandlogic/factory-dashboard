@@ -1,0 +1,45 @@
+export SOURCE_RECONCILIATION:
+    precedence:
+        For the same task and metric, an agent-reported value takes
+        precedence over a conflicting harness value. This includes
+        task status; an agent reporting completion wins over a harness
+        reporting that the task is running.
+    missingValues:
+        Harness data can supply metrics not known by the agent. A
+        report's unknown value is not a conflicting observed value.
+        If neither source supplies a usable value, display unknown.
+    freshness:
+        Track live reporter health separately from task metric freshness.
+        Mark live reporting stale after three missed heartbeats by default,
+        corresponding to 30 seconds at the default 10-second interval.
+        Mark live metrics stale when their last-checked time exceeds the
+        configured threshold even if heartbeats continue. Retain stale
+        values with their last-checked times. A heartbeat or harness update
+        must not make unchecked agent metrics appear fresh. Staleness does
+        not itself reverse agent precedence or imply failure or completion.
+        Completed tasks retain valid final results without further heartbeats;
+        reporter disconnection does not make those final results stale.
+    attemptsAndOrdering:
+        Each retry has a distinct attempt identity. Keep reports from prior
+        attempts associated with those attempts; they cannot overwrite the
+        current attempt. Within an attempt, apply only reports with sequence
+        numbers greater than the last accepted number from that reporting
+        source. Ignore older and duplicate reports without applying their
+        status, metric values, or usage increments again. Preserve the
+        established precedence between agent and harness sources.
+
+export DATA_RELIABILITY_ACCEPTANCE_CRITERIA:
+    - A task-only harness remains visible with unsupported metrics unknown.
+    - Agents use the same reporting contract and update without user prompting.
+    - Agent completion overrides a harness reporting the same task as running.
+    - Known harness usage can fill an agent's unknown usage metric.
+    - A missing usage value is never rendered as zero usage.
+    - Three missed default heartbeats mark live reporting stale.
+    - Heartbeats alone do not refresh task metrics older than 30 seconds.
+    - Completed task results remain valid without continuing heartbeats.
+    - A delayed completion from an earlier attempt cannot complete a newer attempt.
+    - Duplicate and out-of-order reports cannot roll back status or repeat usage.
+    - Stale values remain visible with their last-update time.
+
+export RELIABILITY_OPEN_QUESTIONS:
+    - How will malformed reports and sequence continuity across reporter restarts be handled?

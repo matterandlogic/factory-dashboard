@@ -1,0 +1,28 @@
+export USAGE_REPORTING:
+    coverage:
+        Provide comprehensive usage totals and trends by agent, harness,
+        task, and model where the available telemetry supports attribution.
+        Include shared account quotas, reset times, remaining capacity,
+        projected exhaustion, and costs when available. Preserve unknown
+        values and label estimates under the existing estimate policy.
+    accounting:
+        Distinguish cumulative totals from usage increments. Do not add a
+        cumulative total as though it were a new increment. Associate
+        measurements with their reporting source and accounting period so
+        overlapping observations do not count the same usage twice.
+        Identify shared quotas and count each quota once across the agents
+        that use it; do not multiply shared capacity by the number of agents.
+    presentation:
+        Show units, accounting periods, and attribution coverage with usage
+        and trends. Distinguish unavailable costs from zero cost. Do not
+        combine costs in different currencies as one total without an
+        explicitly defined conversion. Distinguish known usage from estimates.
+    acceptanceCriteria:
+        - Available usage can be examined by agent, harness, task, and model.
+        - Cumulative totals and increments do not double count the same consumption.
+        - Multiple agents sharing an account expose one shared quota.
+        - Available reset times, remaining capacity, exhaustion projections, and costs appear.
+        - Unsupported breakdowns, quotas, projections, or costs are explicitly unknown.
+    openQuestions:
+        - Which reporting periods and history retention are needed for usage trends?
+        - How are shared account identities and overlapping usage observations correlated?

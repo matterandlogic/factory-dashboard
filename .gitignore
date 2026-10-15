@@ -1,0 +1,21 @@
+# Piton generated output (recreated by piton build)
+/.agents/skills/
+/.muse/reference/
+/.piton/manifest.json
+/dist/
+
+# Keep vendored tethers/ and .piton/tether.lock in version control.
+
+# Local credentials and environment overrides
+/.aws/
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Editor and operating system temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

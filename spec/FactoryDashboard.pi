@@ -1,0 +1,64 @@
+from ./builds/BuildExecution import BUILD_EXECUTION
+from ./internal/InterviewState import DEEP_DIVE_STATE, INTERVIEW_STATE
+from ./scope/Estimates import ESTIMATE_POLICY, ESTIMATION_QUESTION
+from ./scope/Overview import
+    CAPABILITIES,
+    INITIAL_SUCCESS_CRITERIA,
+    INTEGRATION_QUESTION,
+    INTENDED_USERS,
+    LIMITS_QUESTION,
+    PURPOSE,
+    REFRESH_QUESTION,
+    SCOPE
+from ./telemetry/AgentReporting import
+    REPORTING_OPEN_QUESTIONS,
+    SHARED_AGENT_REPORTING
+from ./telemetry/DataCollection import
+    DATA_COLLECTION,
+    HARNESS_QUESTION,
+    SOURCE_QUESTION
+from ./telemetry/DataReliability import
+    DATA_RELIABILITY_ACCEPTANCE_CRITERIA,
+    RELIABILITY_OPEN_QUESTIONS,
+    SOURCE_RECONCILIATION
+from ./telemetry/UsageReporting import USAGE_REPORTING
+
+export anchor FactoryDashboard:
+    purpose: {PURPOSE}
+
+    intendedUsers: {INTENDED_USERS}
+
+    capabilities: {CAPABILITIES}
+
+    estimatePolicy: {ESTIMATE_POLICY}
+
+    scope: {SCOPE}
+
+    dataCollection: {DATA_COLLECTION}
+
+    sharedAgentReporting: {SHARED_AGENT_REPORTING}
+
+    sourceReconciliation: {SOURCE_RECONCILIATION}
+
+    dataReliabilityAcceptanceCriteria: {DATA_RELIABILITY_ACCEPTANCE_CRITERIA}
+
+    buildExecution: {BUILD_EXECUTION}
+
+    usageReporting: {USAGE_REPORTING}
+
+    initialSuccessCriteria: {INITIAL_SUCCESS_CRITERIA}
+
+    openQuestions:
+        ++ {HARNESS_QUESTION}
+        ++ {SOURCE_QUESTION}
+        ++ {LIMITS_QUESTION}
+        ++ {ESTIMATION_QUESTION}
+        ++ {REPORTING_OPEN_QUESTIONS}
+        ++ {RELIABILITY_OPEN_QUESTIONS}
+        ++ {REFRESH_QUESTION}
+        ++ {INTEGRATION_QUESTION}
+
+    interviewState: {INTERVIEW_STATE}
+
+    deepDiveState: {DEEP_DIVE_STATE}
+

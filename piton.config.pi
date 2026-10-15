@@ -1,0 +1,28 @@
+use @piton/belay
+use @piton/config
+use @piton/packaging
+
+from @piton/belay import MuseAdapter
+
+export piton-config Project:
+    root: .
+    entry: ./authoring/index.pi
+
+    packages:
+        - {FactoryDashboardPackage}
+
+    frameworks:
+        - {Belay}
+
+    dependencies:
+        - https://github.com/piton-lang/crux.git
+
+belay-config Belay:
+    codeRoot: .
+
+    adapters:
+        - {MuseAdapter}
+
+piton-package FactoryDashboardPackage:
+    name: factory-dashboard
+    root: ./spec

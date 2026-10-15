@@ -1,0 +1,20 @@
+export DATA_COLLECTION:
+    status:
+        A shared agent reporting contract is required. Transport and
+        harness integrations depend on the consuming environment.
+    candidateSources:
+        - Data exposed directly by harnesses.
+        - Temporary files written to provide build information.
+    qualification:
+        Direct harness access and temporary files remain candidate
+        transports. Neither is required by the shared reporting contract.
+    partialCoverage:
+        Monitor a harness even when it exposes only running tasks.
+        Show unavailable metrics as unknown rather than refusing the
+        integration. Missing metrics do not imply zero usage or progress.
+
+export HARNESS_QUESTION:
+    - Which harnesses and orchestration environments must be supported?
+
+export SOURCE_QUESTION:
+    - What task, timing, and usage data can each supported source expose?

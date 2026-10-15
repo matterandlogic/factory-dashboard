@@ -1,0 +1,7 @@
+export ESTIMATE_POLICY:
+    - Clearly label estimated values as estimates.
+    - Leave values unknown when there is insufficient data to estimate.
+    - Apply this policy to progress, completion times, and limit projections.
+
+export ESTIMATION_QUESTION:
+    - How should progress, completion times, and limit projections be estimated?
