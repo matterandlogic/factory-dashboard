@@ -1,7 +1,75 @@
 export PURPOSE:
     A dashboard for monitoring an orchestrated build across agents and
     harnesses. This package supplies an initial specification to tether
-    into another application's specification.
+    into another application's specification. It is a general lattice to
+    build from and adapt to that application, not a drop-in blueprint
+    to reproduce unchanged.
+
+export ADAPTATION_GUIDANCE:
+    principle:
+        Every consuming workflow is different: its orchestration, agents,
+        harnesses, build execution, telemetry sources, usage limits, and
+        interface conventions will not match this package exactly. Build
+        the parts that make sense for that workflow, take the rest as
+        guidance for building the equivalent thing there, and adapt the
+        form while preserving the intent behind each requirement.
+    howToApply:
+        - Start from the consuming application's actual workflow and data, not from this package's assumed shape.
+        - Build capabilities, sources, and sections that fit; omit or defer those that do not apply rather than forcing them in.
+        - Adapt presentation, reporting transport and cadence, breakdowns, limits, and operational defaults to local conventions and available telemetry.
+        - Where a requirement is adapted or omitted, record the decision and its reason in the consuming specification, and preserve its intent in whatever form replaces it.
+    firmInvariants:
+        - Never present fabricated, estimated, or unavailable values as observed telemetry; keep observed, estimated, unknown, and stale values distinct.
+        - Do not count the same work or usage twice when combining sources, and preserve task, agent, harness, and run identity.
+        - Keep the dashboard observational unless the consuming application separately decides otherwise.
+    flexibleByDesign:
+        - Which harnesses, telemetry sources, and local or remote builds are monitored.
+        - Which sections, tables, charts, breakdowns, and limits are shown, and how they are laid out.
+        - Reporting format and transport, refresh and heartbeat cadence, freshness thresholds, and cost and projection methods.
+
+export DROP_IN_CONTRACT:
+    purpose:
+        This package specifies a dashboard that drops into an existing
+        agentic codebase. This contract states what the dashboard may
+        assume from its host, what it must discover or adapt to, and
+        what it guarantees in return.
+    minimumHostAssumption:
+        The dashboard may assume only that the host can identify its
+        work stably: runs, tasks, agents, and attempts have identities,
+        and the host can say when each starts, progresses, and ends.
+        It may not assume any particular harness, build service, usage
+        or quota source, reporting format, or user-interface stack.
+        Everything beyond identity and lifecycle is discovered from
+        the host as it actually is, and stays unknown where the host
+        cannot supply it.
+    integrationBoundary:
+        The core dashboard is read-only: it works by observing the
+        host's existing identity, lifecycle, and telemetry without
+        requiring changes to the host. Adding hooks, reporters, or
+        other instrumentation is optional enrichment that only fills
+        in metrics which would otherwise remain unknown; the absence
+        of such instrumentation never makes an installation failed
+        or incomplete.
+    workModelMapping:
+        Host work is mapped once into the canonical model of runs,
+        tasks, agents, and attempts. Nesting, parallel branches, and
+        retries remain visible rather than being flattened into their
+        parent. Work that cannot be mapped appears as its own row with
+        unknown fields; it is never hidden and never forced into a
+        shape it does not have.
+    coreGuarantee:
+        From identity and lifecycle alone, a viewer can see what work
+        is running, how it is nested and grouped, its status, and its
+        running time. Progress, estimates, software builds, usage,
+        quotas, projections, and costs are opportunistic: each appears
+        where a discovered source supports it and stays unknown where
+        none does.
+    nonInterference:
+        Installing the dashboard must never put host work at risk. It
+        is read-only and failure-isolated: its own failure, slowness,
+        polling, or a broken source adapter never delays, alters, or
+        stops agent work, software builds, or task execution. A failing
+        source degrades to stale or unknown on the dashboard only.
 
 export INTENDED_USERS:
     People watching an orchestrated build who need visibility into the
@@ -14,8 +82,13 @@ export CAPABILITIES:
     - Show usage limits and projections for when those limits may be hit.
     - Provide comprehensive usage totals, trends, breakdowns, quotas, and available costs.
     - Show local and remote software builds used by the consuming pipeline.
+    - Show agent-reported percent complete for running tasks.
+    - Rebuild usage history for the whole orchestration from harness-local records.
+    - Estimate costs from published token rates, with their source and date.
+    - Find and close dead or stuck work automatically.
 
 export SCOPE:
+    - This specification is guidance to adapt to each consuming workflow, not a uniform checklist every application must reproduce in full.
     - The dashboard monitors builds only.
     - Pausing tasks, cancelling runs, and reassigning work are outside scope.
     - This package supplies a specification and an implementation skill.

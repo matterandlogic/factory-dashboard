@@ -41,5 +41,12 @@ export DATA_RELIABILITY_ACCEPTANCE_CRITERIA:
     - Duplicate and out-of-order reports cannot roll back status or repeat usage.
     - Stale values remain visible with their last-update time.
 
+export STALE_WORK_SWEEP:
+    A periodic sweep finds dead or stuck work instead of waiting for a
+    viewer to notice. It closes, with a final report, any task or build
+    reported running whose agent or executor is gone, and it surfaces work
+    that has been silent past a threshold for a human or orchestrator to
+    judge.
+
 export RELIABILITY_OPEN_QUESTIONS:
     - How will malformed reports and sequence continuity across reporter restarts be handled?

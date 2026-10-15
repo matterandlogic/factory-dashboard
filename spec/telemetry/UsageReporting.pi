@@ -5,6 +5,47 @@ export USAGE_REPORTING:
         Include shared account quotas, reset times, remaining capacity,
         projected exhaustion, and costs when available. Preserve unknown
         values and label estimates under the existing estimate policy.
+    history:
+        Usage history covers the whole orchestration, not only the live run.
+        Rebuild it from the records each harness already keeps locally, such
+        as session transcripts, session databases or session export
+        commands. Count each billed message once, deduplicated by its
+        message identity, at its own timestamp and model. A live source that
+        repeats the same messages must not add to totals a second time.
+        Quota percentages that a provider only reports live, and that were
+        not sampled earlier, stay unknown and are never backfilled.
+    projections:
+        For every quota, show the time it is projected to be reached,
+        compared with its reset time, as an estimate with its basis. Quota
+        percentages project from a trend over the samples of the current
+        accounting period, and stay unknown with too few samples or a flat
+        or falling trend. A plan quota that a provider does not expose can
+        come from a snapshot the user supplies (total, used, time read).
+        Calibrate it against the token history up to that time to estimate
+        units per token, then project current use and exhaustion from the
+        trailing burn. The calibration ratio is shown and labeled as an
+        estimate.
+    ratePerHour:
+        Show the percentage of each quota consumed per hour, as a chart and
+        as a current rate beside each quota. Hours without samples are gaps,
+        never zero.
+    costs:
+        When providers publish pay-as-you-go token rates, estimate costs
+        from them, and label the result as an estimate at API rates, since
+        actual spend depends on the subscription or plan. Prefer
+        machine-readable price lists, fetched at most daily and cached, and
+        show the age of the rates. When a provider publishes rates only on a
+        web page, pin them in a local override that records the source and
+        the date read. Bill reasoning tokens at the output rate unless the
+        provider says otherwise. Tokens without a rate have unknown cost,
+        are counted as unpriced, and are never shown as zero.
+    perMinuteLimits:
+        When a provider enforces per-minute request or token limits, or a
+        concurrency limit, and the orchestrator throttles agents to stay
+        under them, show each model's observed rate against its limit and
+        the orchestrator's current admission cap. Label the rates as
+        estimates averaged over their window, and explain in one line what
+        the limits are and what the cap does.
     accounting:
         Distinguish cumulative totals from usage increments. Do not add a
         cumulative total as though it were a new increment. Associate
@@ -23,6 +64,10 @@ export USAGE_REPORTING:
         - Multiple agents sharing an account expose one shared quota.
         - Available reset times, remaining capacity, exhaustion projections, and costs appear.
         - Unsupported breakdowns, quotas, projections, or costs are explicitly unknown.
-    openQuestions:
-        - Which reporting periods and history retention are needed for usage trends?
-        - How are shared account identities and overlapping usage observations correlated?
+        - Usage history reaches back to the start of the orchestration, with every billed message counted once.
+        - Each quota shows its projected limit-reached time and its percentage consumed per hour.
+        - Cost estimates name their rate source and its date, and unpriced tokens are never counted as zero.
+
+export USAGE_OPEN_QUESTIONS:
+    - Which reporting periods and history retention are needed for usage trends?
+    - How are shared account identities and overlapping usage observations correlated?

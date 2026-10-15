@@ -25,16 +25,28 @@ export BUILD_EXECUTION:
         Apply the existing unknown-value, estimate-labeling, freshness,
         and agent-precedence policies to build telemetry. A temporarily
         unreachable runner does not by itself imply a failed build.
+    phantoms:
+        A build whose executor died without a final report must not stay
+        running on the dashboard. Show a build as running only while there
+        is evidence its executor is alive, for example the build-slot lock
+        it holds or its process. Otherwise show it as disconnected with its
+        last report time. Executors should report a final stopped status
+        when interrupted, reporting before any slower cleanup, because a
+        hard kill can follow moments later. A periodic sweep closes, with a
+        final report, any build whose last report is running while its
+        executor is gone.
     boundary:
         Observe the existing build pipeline. Do not introduce build
         triggering, cancellation, runner selection, or changes to the
         application's local or remote execution strategy.
     acceptanceCriteria:
+        - A build whose executor is gone is never shown as running; it appears as disconnected and is closed by the sweep.
         - A local build appears with its task association and known status and timing.
         - A remote build is identified as remote even when its agent runs locally.
         - Local and remote jobs in one pipeline retain their individual locations.
         - Missing build metrics are unknown and available estimates are labeled.
         - A disconnected build source is marked stale under the existing policy.
-    openQuestions:
-        - Which local tools and remote build services does the consuming pipeline use?
-        - What job identity, status, timing, progress, and log access do they expose?
+
+export BUILD_OPEN_QUESTIONS:
+    - Which local tools and remote build services does the consuming pipeline use?
+    - What job identity, status, timing, progress, and log access do they expose?

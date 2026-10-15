@@ -1,11 +1,16 @@
 export SHARED_AGENT_REPORTING:
     obligation:
-        Agents must automatically provide task status, timing, progress,
-        estimated completion, usage, limits, and limit projections through
-        one shared format across agents and harnesses. Agents must make
-        available information explicit; missing harness telemetry does
-        not remove the reporting obligation. Information an agent cannot
-        obtain or reasonably estimate must be explicitly unknown.
+        Agent reporting is optional enrichment under the drop-in
+        contract, not a prerequisite for installing the dashboard:
+        the core dashboard works read-only from the host's existing
+        identity and lifecycle. Where a consuming application adopts
+        agent reporting, agents must automatically provide task status,
+        timing, progress, estimated completion, usage, limits, and
+        limit projections through one shared format across agents and
+        harnesses. Agents must make available information explicit;
+        missing harness telemetry does not remove the reporting
+        obligation once reporting is adopted. Information an agent
+        cannot obtain or reasonably estimate must be explicitly unknown.
     formatBoundary:
         The consuming application defines one concrete serialization
         and transport for this shared contract. All reporting agents
@@ -31,6 +36,21 @@ export SHARED_AGENT_REPORTING:
         an agent is busy or blocked. Heartbeats indicate reporter health;
         each task metric retains its own last-checked time. Sending a
         heartbeat alone does not refresh task status or metrics.
+    progressReporting:
+        Agents report their own approximate percent complete of the whole
+        task, with a short note on what they are doing, about every ten
+        minutes and at each milestone. The consuming application gives every
+        agent an exact reporting command or call in its task instructions,
+        filled in with that agent's run, task and attempt identity, so an
+        agent never has to work out its identity. Reported progress is the
+        agent's estimate, labeled as such, carries its own last-checked
+        time, and goes stale like any other metric. A task that has never
+        reported shows progress as unknown. Agent-reported progress never
+        replaces a derived completion estimate; both are shown.
+    harnessOnlyTasks:
+        Work that a harness shows but that sends no reports of its own, for
+        example a session started before reporting existed, is shown as a
+        harness-only row with its unknown metrics, never hidden.
     configurableDefaults:
         reportingIntervalSeconds: 10
         staleAfterSeconds: 30

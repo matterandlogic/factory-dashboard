@@ -11,10 +11,32 @@ export skill ImplementFactoryDashboard:
         in a consuming application
     prompt:
         Implement the dashboard in the current consuming application using
-        @{FactoryDashboard} and its existing specification as the requirements.
-        Start by inspecting the application and asking focused questions
-        about its build setup. After the necessary answers, implement and
-        verify the dashboard; do not stop at a specification or plan.
+        @{FactoryDashboard} as a general lattice to adapt to this
+        application's workflow, not as a drop-in blueprint to reproduce
+        unchanged, under its drop-in contract: assume only stable run,
+        task, agent, and attempt identity and lifecycle from the host,
+        keep the core dashboard read-only and failure-isolated, and treat
+        every other capability as discovered, opportunistic enrichment.
+        Build the parts that make sense here, take the rest as guidance
+        for building the equivalent thing in this workflow, and preserve
+        each requirement's intent when its form changes. Start by
+        inspecting the application and asking focused questions about its
+        build setup. After the necessary answers, implement and verify the
+        dashboard; do not stop at a specification or plan.
+
+    adaptToThisWorkflow:
+        Every consuming workflow differs in orchestration, harnesses,
+        telemetry, limits, and interface conventions. Decide from the
+        inspected application which capabilities, sources, sections, and
+        defaults in @{FactoryDashboard} apply, which need a local
+        equivalent, and which do not apply at all. Do not force a source,
+        section, breakdown, or presentation form that this workflow
+        cannot support or does not need; omit or defer it instead. Keep
+        the firm invariants in @{FactoryDashboard}: never present
+        fabricated or unavailable values as observed telemetry, do not
+        double-count combined work or usage, and keep the dashboard
+        observational. Record each material adaptation or omission, and
+        its reason, in the consuming specification.
 
     inspectTheApplication:
         Before Piton work, run piton agent --print-fluency in the consuming
@@ -24,6 +46,12 @@ export skill ImplementFactoryDashboard:
         references, and applicable project guidance. Locate the application
         UI, build orchestration, harness integrations, and existing telemetry.
         Follow references only as needed.
+
+        First establish the host's stable run, task, agent, and attempt
+        identities and lifecycle signals, and how nested, parallel, and
+        retried work maps into that canonical model; this mapping is the
+        foundation the read-only core is built on, and work that cannot
+        be mapped stays visible as its own row with unknown fields.
 
         Discover whether the consuming pipeline uses local or remote
         software builds, including mixed execution. Inspect its existing
@@ -60,17 +88,30 @@ export skill ImplementFactoryDashboard:
 
     alignTheSpecification:
         Record confirmed integration decisions in the consuming project's
-        own .pi source, using its established structure. Preserve unrelated
-        requirements and distinguish confirmed decisions from unresolved
-        questions. Treat tethered package files as vendored dependencies;
-        do not edit them to customize the consuming application. Keep lasting
-        guidance changes in source and rebuild generated artifacts.
+        own .pi source, using its established structure. Record what was
+        taken from @{FactoryDashboard} as-is, what was adapted to this
+        workflow, and what was omitted or deferred and why, so the local
+        specification reads as this application's own design rather than
+        a copy of the package. Preserve unrelated requirements and
+        distinguish confirmed decisions from unresolved questions. Treat
+        tethered package files as vendored dependencies; do not edit them
+        to customize the consuming application. Keep lasting guidance
+        changes in source and rebuild generated artifacts.
 
     implementTheDashboard:
-        Use the application's existing stack and UI conventions. Implement
-        task visibility across agents and harnesses, running time, available
-        progress and completion estimates, usage limits, and projections
-        for reaching those limits, following @{FactoryDashboard}.
+        Use the application's existing stack and UI conventions. Build
+        the read-only core first: from identity and lifecycle alone it
+        must show what work is running, how it is nested and grouped,
+        its status, and its running time, without requiring any change
+        to the host. Keep that core failure-isolated, so a broken or
+        slow source, adapter, or dashboard component degrades to stale
+        or unknown on the dashboard and never delays, alters, or stops
+        agent work, builds, or task execution. Where they fit this
+        workflow, add progress and completion estimates, usage limits,
+        and projections for reaching those limits as enrichment,
+        following @{FactoryDashboard} as guidance adapted to the
+        sources and workflow actually found; do not add a capability in
+        a form this application cannot support.
 
         Connect to the verified sources. Preserve task, agent, harness,
         and run identity when combining data, and account for parallel
@@ -105,24 +146,53 @@ export skill ImplementFactoryDashboard:
         telemetry as unknown rather than introducing a different build system.
 
     reportingLifecycleAndUsage:
-        Implement the attempt identity, sequence ordering, reporter health,
-        metric freshness, and completed-result rules in @{FactoryDashboard}.
+        Where this workflow reports in the same way, implement the attempt
+        identity, sequence ordering, reporter health, metric freshness,
+        and completed-result rules in @{FactoryDashboard}; where its
+        reporting lifecycle differs, build the local equivalent that
+        keeps the same protections against stale, duplicated, or
+        out-of-order data.
         Use a harness hook or background reporter for heartbeats while an
         agent is occupied. Implement usageReporting with available totals,
         trends, breakdowns, shared quotas, reset times, remaining capacity,
         exhaustion projections, and costs. Verify that replayed reports and
         overlapping cumulative totals and increments do not duplicate usage.
+        Give every agent an exact progress-reporting command in its task
+        instructions, implement usage history from harness-local records,
+        quota projections and per-hour consumption rates, cost estimates
+        from published rates with their source, phantom-build detection and
+        a periodic stale-work sweep, following @{FactoryDashboard}.
+
+    presentation:
+        Treat the presentation guidance in @{FactoryDashboard} as a
+        default lattice — a summary strip, sections with one story each,
+        full data tables with header tooltips, page-only scrolling with
+        stacked cards on narrow screens, concise explanations, and one
+        consistent visual grammar — adapted to this application's design
+        system, layout constraints, and the data it actually has, rather
+        than reproduced element for element. Preserve its intent: a
+        viewer can find running work, builds, quotas, and costs quickly,
+        and observed and estimated values stay distinguishable. Verify
+        the result with screenshots at desktop and phone widths in light
+        and dark modes, using a headless browser when no interactive
+        browser is available.
 
     verifyAndReport:
         Run piton format, piton check, and piton build after specification
         changes, fix reported source problems, and inspect generated diffs.
         Run the application's relevant checks and exercise the dashboard
         against available real telemetry or clearly identified fixtures.
-        Verify concurrent task grouping and timing, usage calculations,
+        Verify that the core task view works from identity and lifecycle
+        alone with every enrichment source absent, that unmapped and
+        nested work stays visible, and that a failing or slow source
+        degrades to stale or unknown without affecting host work. Verify
+        concurrent task grouping and timing, usage calculations,
         estimate labeling, and missing or stale data behavior where relevant.
         Use browser verification when available for the implemented UI.
 
-        Report what was implemented, the connected data sources, checks
-        actually run and their results, how to open the dashboard, and any
-        remaining unsupported metrics or blocked integrations. Do not claim
-        live integration was verified when only fixtures were available.
+        Report what was implemented, what was adapted or omitted from
+        @{FactoryDashboard} for this workflow and why, the connected data
+        sources, checks actually run and their results, how to open the
+        dashboard, and any remaining unsupported metrics or blocked
+        integrations. Do not claim live integration was verified when
+        only fixtures were available.
