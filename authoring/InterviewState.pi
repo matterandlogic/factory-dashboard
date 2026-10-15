@@ -1,0 +1,34 @@
+export INTERVIEW_STATE:
+    questionBudget: 5
+    questionsAnswered: 5
+    specificationGenerated: true
+    status: Initial round complete; implementation skill requested and added.
+    currentFocus: Use the implementation skill in the consuming application.
+    outstandingInterviewQuestions: []
+
+export DEEP_DIVE_STATE:
+    target: FactoryDashboard as a drop-in dashboard for an existing agentic codebase.
+    questionBudget: 5
+    questionsAnswered: 5
+    refinementApplied: true
+    awaitingAcceptance: true
+    status: Drop-in contract round complete; awaiting acceptance.
+    currentFocus: Whether the drop-in contract refinement is good enough or continues.
+    decisions:
+        - Partial telemetry is accepted with unknown metrics.
+        - Agents must supply available metrics automatically in a shared format.
+        - Agent reports take precedence over conflicting harness reports.
+        - Reasonable configurable freshness defaults are delegated to the author.
+        - Each retry has its own attempt identity and reports carry sequence numbers.
+        - Three missed heartbeats mark live reporting stale; completed results stay valid.
+        - A harness hook or background reporter maintains independent heartbeats.
+        - Comprehensive usage includes breakdowns, trends, shared quotas, and available costs.
+        - The dashboard may assume only stable run, task, agent, and attempt identity and lifecycle from its host.
+        - The core dashboard is read-only; hooks, reporters, and instrumentation are optional enrichment only.
+        - Host work maps once into the canonical model, preserving nesting, parallelism, and retries; unmappable work stays visible.
+        - Task visibility from identity and lifecycle alone is the core guarantee; all other capabilities are opportunistic.
+        - The dashboard is failure-isolated and must never delay, alter, or stop host work.
+    remainingUncertainty:
+        Concrete per-host identity mappings and source capabilities,
+        serialization, transport, report validation and restart recovery,
+        and estimation methods remain open as recorded in openQuestions.

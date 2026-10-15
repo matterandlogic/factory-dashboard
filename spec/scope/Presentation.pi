@@ -1,0 +1,33 @@
+export PRESENTATION:
+    organization:
+        - A compact summary strip of key figures comes first: progress of the overall work, running, queued and blocked tasks, active builds by location, each quota's usage with its reset time, and estimated cost.
+        - Detail is organized into a few clearly named sections or tabs, one story each: an overview that summarizes and links onward, tasks, builds, usage and costs, and completions.
+        - The overview is an at-a-glance summary with links into the detail sections, not a copy of them.
+        - The same figure does not appear in several places.
+        - Usage and costs read in order: limits and projections, then consumption rate, then history and breakdowns, then the rates used.
+        - Source health is a small status indicator that expands to per-source detail, not a row of controls that dominates the header.
+    dataTables:
+        - Running tasks, builds and completions are shown in data tables.
+        - Data tables have sortable columns, free-text search, combinable filters by attributes such as harness, status, kind and model, and columns that can be shown or hidden.
+        - Rows expand to show detail. The header stays fixed while the page scrolls, and a count shows how many rows match the filters out of the total.
+        - The browser keeps sort, filters, search and visible columns locally as a convenience. The table must work without that storage.
+        - Unknown values display as unknown and sort after known ones.
+        - Every column header has a tooltip giving the full, unabbreviated column title and a one-sentence description of what the column shows and where its value comes from.
+    scrolling:
+        - Only the page scrolls. No panel, card or table has its own scroll area.
+        - Tables grow with their rows, and their headers stick to the top of the window.
+        - On narrow screens each table row becomes a stacked card with a label per value, so nothing is wider than the page.
+    explanations:
+        - Explanations of how an estimate or figure is derived live in concise tooltips, per-card information toggles, or one collapsible methodology section, not in sentences repeated under every figure.
+        - Every estimated figure keeps a short estimate marker.
+    visualGrammar:
+        - One consistent card, spacing and type scale.
+        - Status colors are consistent everywhere.
+        - Observed and estimated values are distinguished consistently by color and marker.
+        - Figures use tabular numerals and consistent formats.
+        - Charts share one style of axes, gridlines, labels and legends. Their time axes fit the data, gaps stay visible, and related per-hour series share one axis as small multiples.
+        - Dark mode is supported with accessible contrast.
+    acceptanceCriteria:
+        - Nothing but the page scrolls, at desktop and phone widths.
+        - Every table column header shows its full title and a description on hover or focus.
+        - A viewer can find running tasks, builds, quotas and costs from the summary strip and section names without reading explanatory text.
